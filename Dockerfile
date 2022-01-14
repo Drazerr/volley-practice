@@ -14,7 +14,7 @@ WORKDIR /home/node/app
 COPY --from=ts-compiler /home/app/package*.json ./
 USER node
 RUN npm install
-COPY --from=ts-compiler /home/app/build ./
+COPY --from=ts-compiler /home/app/dist ./
 
 EXPOSE 8080
 CMD [ "node", "index.js" ]
