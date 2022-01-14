@@ -12,7 +12,7 @@ export type Traits = {
 };
 
 /**
- * Big Five personality traits
+ * Big Five personality traits.
  * Each factor is a scale of different predicates and descriptions for that
  *  factor
  */
