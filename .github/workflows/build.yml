@@ -36,4 +36,5 @@ jobs:
           ECR_REGISTRY: drazer
         run: |
           docker build -t volleypractice:$IMAGE_TAG ./
+          docker tag volleypractice:$IMAGE_TAG ${{secrets.DOCKER_USERNAME}}/volleypractice:$IMAGE_TAG
           docker push $ECR_REGISTRY/volleypractice:$IMAGE_TAG
