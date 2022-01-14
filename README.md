@@ -1,5 +1,5 @@
 ## Volley Name Analysis API:
-This project exposes a single GET endpoint, which performs name-analysis based on 2-3 query params. It will return a payload consisting of some metadata and a list of phrases which best describe you. Through the magic of hashing, we guarantee that each input always returns the same results. Through the magic of caching, we are able to keep that guarantee even if the underlying data source changes..
+This project exposes a single GET endpoint, which performs name-analysis based on 2-3 query params. It will return a payload consisting of some metadata and a list of phrases which best describe you. Through the magic of hashing, we guarantee that each input always returns the same results. Through the magic of caching, we are able to keep that guarantee even if the underlying data source changes.
 
 ```ts
 name: string - your name (required)
