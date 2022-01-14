@@ -10,30 +10,29 @@ on:
     branches:         # array of glob patterns matching against refs/heads. Optional; defaults to all
     - master          # triggers on pushes that contain changes in master
    
- jobs:
-  build-and-push:
-    name: Build and Deploy
+jobs:
+  docker:
     runs-on: ubuntu-latest
     steps:
-    - name: Docker Login
-    # You may pin to the exact commit or the version.
-    # uses: docker/login-action@42d299face0c5c43a0487c477f595ac9cf22f1a7
-    uses: docker/login-action@v1.12.0
-    with:
-      # Server address of Docker registry. If not set then will default to Docker Hub
-      registry: # optional
-      # Username used to log against the Docker registry
-      username: ${{ secret.DOCKER_USERNAME }} # optional
-      # Password or personal access token used to log against the Docker registry
-      password: ${{ secrets.DOCKER_PASSWORD }} # optional
-      # Specifies whether the given registry is ECR (auto, true or false)
-    
-    - name: Check out code
-      uses: actions/checkout@v2
-
-    - name: Build, tag, and push image to Amazon ECR
-      env:
-        IMAGE_TAG: ${{ github.sha }}
-      run: |
-        docker build -t $username/volleypractice:$IMAGE_TAG ./
-        docker push $username/$volleypractice:$IMAGE_TAG
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: user/app:latest
