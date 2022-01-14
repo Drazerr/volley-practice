@@ -1,0 +1,49 @@
+name: Deploy to ECR
+
+on:
+  pull_request:
+    paths:
+    - main/app/**
+  push:
+    paths:
+    - main/app/**
+    branches:         # array of glob patterns matching against refs/heads. Optional; defaults to all
+    - master          # triggers on pushes that contain changes in master
+    
+env:
+  RELEASE_REVISION: "pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}"
+  AWS_DEFAULT_OUTPUT: json
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+  ECR_REPOSITORY: volley
+  CONTAINER_IMAGE: volley:${{ github.sha }}
+
+jobs:
+  build-and-push:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
+    # see: https://github.com/aws-actions/configure-aws-credentials
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-2
+
+    # see: https://github.com/aws-actions/amazon-ecr-login
+    - name: Log in to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+      
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Build, tag, and push image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: volley
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
