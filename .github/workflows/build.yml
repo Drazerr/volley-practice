@@ -1,12 +1,14 @@
 name: Deploy to ECR
 
 on:
- 
+  pull_request:
+    paths:
+    - app/**
   push:
-    branches: [ master ]
-  pull_request: 
-    branches: [ master ]
-
+    paths:
+    - app/**
+    branches:         # array of glob patterns matching against refs/heads. Optional; defaults to all
+    - master          # triggers on pushes that contain changes in master
     
 env:
   RELEASE_REVISION: "pr-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}"
@@ -40,7 +42,7 @@ jobs:
         # Build and tag the image
         docker build \
           -t $CONTAINER_IMAGE \
-          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE .
+          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE ./app
            
     # Add additional steps here like scanning of image
 
