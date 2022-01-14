@@ -5,7 +5,7 @@ COPY package*.json ./
 COPY tsconfig*.json ./
 USER node
 RUN npm install
-COPY --chown=node:node . ./
+COPY --chown=node:node ./app ./
 RUN npm run build
 
 FROM node:14-alpine3.10
