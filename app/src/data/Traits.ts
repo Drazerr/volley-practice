@@ -21,7 +21,7 @@ const DEFAULT_TRAITS: Traits = {
     {
       predicate: "have an imaginative side",
       description:
-        "Your pasta art wasn't put on the fridge. It was framed, auctioned, and studied.",
+        "Your pasta art wasn't put on the fridge. It was framed, auctioned, & studied.",
     },
     {
       predicate: "may be considered curious to a fault",
