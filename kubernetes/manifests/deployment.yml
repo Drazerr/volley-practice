@@ -23,7 +23,7 @@ spec:
       containers:
       - name: volley
         # image: 00000000000000.dkr.ecr.my-region.amazonaws.com/example-eks:tag
-        image: drazer/volleypractice:79f20a3e924a864167b380bed1892273aa319ab5
+        image: drazer/volleypractice:de85bd644331c457d0aa840a3eeb6e515a9398c8
         ports:
         - containerPort: 8080
         resources:
